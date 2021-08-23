@@ -1,6 +1,0 @@
-library(palmerpenguins)
-my_penguins <- data("palmerpenguins")
-
-write_csv(my_penguins)
-
-

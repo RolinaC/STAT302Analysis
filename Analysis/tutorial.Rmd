@@ -1,11 +1,7 @@
 ---
-title: "Project 3: STAT302PACKAGE Tutorial"
+title: "Project 3: STAT302Analysis Tutorial"
 author: "Rolina Cao"
 output: rmarkdown::html_vignette
-vignette: >
-  %\VignetteIndexEntry{STAT302PACKAGE Tutorial}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 <!--- Begin styling code. --->
 <style type="text/css">
@@ -125,6 +121,7 @@ ggplot2::ggplot(df, ggplot2::aes(x = Fitted, y = Actual)) +
   ggplot2::labs(title = "Actual vs. Fitted", x = "Actual", y = "Fitted") +
   ggplot2::theme_bw() +
   ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5))
+  ggplot2::ggsave("plot1.jpg")
 ```
 
 Accordng to the graph, we can conclude that the model follows a linear relationship since most points are plotted along the best fit line with some outliers.
@@ -192,12 +189,15 @@ for (k in c(2, 5, 10)) {
 df <- as.data.frame(result)
 colnames(df) <- c("k = 2", "k = 5", "k = 10")
 
+
 #plot the simulations
 plot_df <- as.data.frame(matrix(NA, nrow = 90, ncol = 2))
 n <- c(df$`k = 2`, df$`k = 5`, df$`k = 10`)
 plot_df[, 1] <- cbind(n)
 plot_df[, 2] <- cbind(rep(c("2", "5", "10"), each = 30))
 colnames(plot_df) <- c("mse", "k")
+
+saveRDS(plot_df, "../Output/Results/mse_k.rds")
 
 plot <- ggplot2::ggplot(data = plot_df, 
               aes(x = k, y = mse)) +
@@ -206,9 +206,12 @@ plot <- ggplot2::ggplot(data = plot_df,
          ggplot2::labs(title = "Distribution of CV estimated MSE by number of                         folds", x = "Number of folds", 
                        y = "CV estimated MSE") +
          ggplot2::theme_bw() +
-         ggplot2::theme(plot.title = element_text(hjust = 0.5, size = 14),)
-
+         ggplot2::theme(plot.title = element_text(hjust = 0.5, size = 14))
+         ggplot2::ggsave("plot2.jpg")
 plot
+
+write.csv(plot_df, "../Output/Results/summary.rds")
 ```
 
-By the above boxplots, notice that when k = 2, we have the largest mse and medians of mse, while the statistics of k = 10 are quite smaller. Thu7s, we can conclude that as the k increases, the cv mse decreases.
+By the above boxplots, notice that when k = 2, we have the largest mse and medians of mse, while the statistics of k = 10 are quite smaller. Thus, we can conclude that as the k increases, the cv mse decreases.
+
